@@ -60,7 +60,7 @@ gcc -o client epoll_client.c connection.c -Wall -Wextra -O2
     Open another terminal and run the `client` executable. It will attempt to connect to the server.
 
     ```sh
-sh
+
     # Connect to the default server (127.0.0.1:8080)
     ./ftp_client_epoll
     ```
