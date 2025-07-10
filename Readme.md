@@ -8,7 +8,7 @@ This project implements a high-performance, single-threaded, non-blocking FTP-li
 
 ## Key Features
 
--   **High Concurrency**: The server uses `epoll` to manage thousands of simultaneous connections within a single thread.
+-   **High Concurrency**: The server uses `epoll` to manage simultaneous connections within a single thread.
 -   **Fully Asynchronous I/O**: Both server and client use non-blocking sockets to prevent I/O operations from stalling the application.
 -   **Responsive Client UI**: The client's terminal remains fully interactive during large file transfers thanks to its `epoll`-based design that monitors both user input and network sockets.
 -   **Robust File Transfers**: A custom chunk-based binary protocol ensures reliable transfers of large files, complete with progress bars on the client-side.
@@ -50,10 +50,10 @@ gcc -o client epoll_client.c connection.c -Wall -Wextra -O2
 
     ```sh
     # Run on the default port 8080
-    ./server
+    ./ftp_server_epoll
 
     # Run on a custom port (e.g., 9090)
-    ./server 9090
+    ./ftp_server_epoll 9090
     ```
 
 2.  **Start the Client**:
@@ -62,7 +62,7 @@ gcc -o client epoll_client.c connection.c -Wall -Wextra -O2
     ```sh
 sh
     # Connect to the default server (127.0.0.1:8080)
-    ./client
+    ./ftp_client_epoll
     ```
 
     Once connected, you will see the `ftp>` prompt. Type `help` to see a list of available commands.
