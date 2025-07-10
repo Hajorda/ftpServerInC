@@ -1,0 +1,47 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -g
+SRCDIR = .
+OBJDIR = .
+
+# Original server files
+SERVER_SOURCES = main.c server.c commands.c
+SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
+SERVER_TARGET = ftp_server
+
+# Epoll server files
+EPOLL_SERVER_SOURCES = main_epoll.c epoll_server.c commands.c server.c
+EPOLL_SERVER_OBJECTS = $(EPOLL_SERVER_SOURCES:.c=.o)
+EPOLL_SERVER_TARGET = ftp_server_epoll
+
+.PHONY: all clean server epoll
+
+# Build both versions
+all: $(SERVER_TARGET) $(EPOLL_SERVER_TARGET)
+
+# Original server
+$(SERVER_TARGET): $(SERVER_OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Epoll server
+$(EPOLL_SERVER_TARGET): $(EPOLL_SERVER_OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Server only (original)
+server: $(SERVER_TARGET)
+
+# Epoll server only
+epoll: $(EPOLL_SERVER_TARGET)
+
+# Generic rule for object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o $(SERVER_TARGET) $(EPOLL_SERVER_TARGET)
+
+# Dependencies
+main.o: main.c server.h
+server.o: server.c server.h commands.h colors.h
+commands.o: commands.c commands.h colors.h server.h
+main_epoll.o: main_epoll.c epoll_server.h server.h
+epoll_server.o: epoll_server.c epoll_server.h server.h commands.h colors.h

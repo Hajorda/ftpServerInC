@@ -1,0 +1,46 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -g
+SRCDIR = .
+OBJDIR = .
+
+# Original client files
+CLIENT_SOURCES = client.c connection.c transfer.c
+CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
+CLIENT_TARGET = ftp_client
+
+# Epoll client files
+EPOLL_CLIENT_SOURCES = epoll_client.c
+EPOLL_CLIENT_OBJECTS = $(EPOLL_CLIENT_SOURCES:.c=.o)
+EPOLL_CLIENT_TARGET = ftp_client_epoll
+
+.PHONY: all clean client epoll
+
+# Build both versions
+all: $(CLIENT_TARGET) $(EPOLL_CLIENT_TARGET)
+
+# Original client
+$(CLIENT_TARGET): $(CLIENT_OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Epoll client
+$(EPOLL_CLIENT_TARGET): $(EPOLL_CLIENT_OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Client only (original)
+client: $(CLIENT_TARGET)
+
+# Epoll client only
+epoll: $(EPOLL_CLIENT_TARGET)
+
+# Generic rule for object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o $(CLIENT_TARGET) $(EPOLL_CLIENT_TARGET)
+
+# Dependencies
+client.o: client.c client.h colors.h
+connection.o: connection.c client.h
+transfer.o: transfer.c client.h colors.h
+epoll_client.o: epoll_client.c epoll_client.h client.h colors.h
