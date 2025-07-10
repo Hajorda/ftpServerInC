@@ -3,7 +3,8 @@
 
 This project implements a high-performance, single-threaded, non-blocking FTP-like server and a corresponding interactive client using Linux's `epoll` API. The entire application is written in C and is designed to handle multiple concurrent connections efficiently without the overhead of a thread-per-client model.
 
- <!-- It's highly recommended to add a screenshot or GIF of the client/server in action -->
+
+![Terminal Demo](https://raw.githubusercontent.com/Hajorda/ftpServerInC/refs/heads/main/server/saved/terminal.gif)
 
 ## Key Features
 
